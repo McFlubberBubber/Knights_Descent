@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54787bc654ce4dd4596187e00802a821, type: 3}
+  m_Name: SkeletonMage
+  m_EditorClassIdentifier: 
+  enemyName: Skeleton Mage
+  maxHealth: 50
+  resetHealthOnSpawn: 1
+  enemyUIPrefab: {fileID: 5904760455237297746, guid: ceaf94b5b2dc49e4ba1c62ed9645a472, type: 3}
+  enemyPrefab: {fileID: 4780257072666870410, guid: 53672481f8fadc048becd7a93b784c3e, type: 3}
+  actionSequence:
+  - {fileID: 11400000, guid: 7cf3f2189f04ac945895b8411b401443, type: 2}
+  - {fileID: 11400000, guid: 73fc657cb6f270f4a82017daeb25b5b9, type: 2}
+  - {fileID: 11400000, guid: 1a79f4a273da3e3419e8f92bc7bf7b98, type: 2}
+  - {fileID: 11400000, guid: 7cf3f2189f04ac945895b8411b401443, type: 2}
+  - {fileID: 11400000, guid: 362cc92e31a511047bbf07f9013ef24a, type: 2}
+  loopSequence: 1
+  randomizeSequence: 0
+  currentSequenceIndex: 0

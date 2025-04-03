@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 8ea60d5dd34901345ad0d79601d39f52
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - intentIconOverride: {fileID: -2948361868123134016, guid: 0cb4aa5a7bda5b644bf4fcca174b5d0f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
