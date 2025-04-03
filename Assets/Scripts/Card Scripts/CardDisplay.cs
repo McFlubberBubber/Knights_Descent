@@ -28,13 +28,15 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
     private int originalIndex;
     public static CardDisplay selectedCard = null; // Static reference to the currently selected card
     private float selectedOffset = -200;
-    private CardHandLayout handLayout; 
+    private CardHandLayout handLayout;
+    private CardLogic cardLogic;
     
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>(); // Ensure CanvasGroup exists
         parentBeforeDrag = transform.parent;
         handLayout = parentBeforeDrag.GetComponent<CardHandLayout>();
+        cardLogic = GetComponent<CardLogic>();
     }
 
     //Function that will update the card display with the card data
@@ -121,15 +123,27 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
         transform.position = eventData.position;
     }
 
-    //Function that handles the end of the drag event
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData) //test function
     {
-        if (selectedCard == this) return;
+        // Check if we dropped the card on the player
+        RaycastHit2D hit = Physics2D.Raycast(eventData.position, Vector2.zero);
 
-        transform.SetParent(parentBeforeDrag);
-        transform.SetSiblingIndex(originalIndex);
-        transform.localPosition = originalPosition;
-        transform.localRotation = originalRotation;
+        if (hit.collider != null && hit.collider.CompareTag("Player")){
+            Debug.Log("Card dropped on player: " + card.cardName);
+            cardLogic.PlayCard(); // Call PlayCard() when card is dropped on the player
+
+        } else if (hit.collider != null && hit.collider.CompareTag("Enemy")) {
+            Debug.Log("Card dropped on enemy: " + card.cardName);
+            cardLogic.PlayCard(); // Call PlayCard() when card is dropped on the enemy
+
+        } else {
+            // Reset position if not dropped on a valid target
+            transform.SetParent(parentBeforeDrag);
+            transform.SetSiblingIndex(originalIndex);
+            transform.localPosition = originalPosition;
+            transform.localRotation = originalRotation;
+        }
+
         canvasGroup.blocksRaycasts = true;
         handLayout.SetHandUpdating(true);
     }
@@ -148,6 +162,4 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
         }
         transform.localPosition = endPos;
     }
-
-    //Functions for card dropping
 }

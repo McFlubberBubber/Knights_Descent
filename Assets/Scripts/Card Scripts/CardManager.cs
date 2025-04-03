@@ -13,9 +13,10 @@ public class CardManager : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private TMP_Text drawCountText;
     [SerializeField] private TMP_Text discardCountText;
+    [SerializeField] private TMP_Text deckCountText;
     [SerializeField] private Button endTurnButton;
     [SerializeField] private PlayerStats playerStats;
-    [SerializeField] private EnergyManager energyManager; 
+    [SerializeField] public EnergyManager energyManager; 
     [SerializeField] private EnemyController enemyController; 
 
     [Header("Visual Feedback")]
@@ -126,11 +127,13 @@ public class CardManager : MonoBehaviour
 
         // Debug.Log($"Drawn card: {drawnCard.cardName}");
 
+        //Assigning the setters within card logic
         CardLogic cardLogic = newCard.GetComponent<CardLogic>();
         if(cardLogic != null){
             cardLogic.SetPlayerStats(playerStats);
             cardLogic.SetEnergyManager(energyManager);
             cardLogic.SetEnemyController(enemyController);
+            cardLogic.SetCardManager(this); 
         }
 
         StartCoroutine(AnimateCardDraw(newCard));
@@ -176,6 +179,7 @@ public class CardManager : MonoBehaviour
     public void UpdateDeckCountText(){
         drawCountText.text = drawPile.Count.ToString();
         discardCountText.text = discardPile.Count.ToString();
+        deckCountText.text = $"Deck Size: {playerDeck.Count}";
     }
 
     //Function that handles the animation of the cards being drawn from the draw pile to the hand
@@ -285,5 +289,40 @@ public class CardManager : MonoBehaviour
         cardObj.transform.localScale = endScale;
         cardObj.SetActive(false);
         Destroy(cardObj);
+    }
+
+    public void DiscardPlayedCard(GameObject cardObj, Card card){
+        if (playerHand.Contains(card)){
+            playerHand.Remove(card);
+            discardPile.Add(card);
+        }
+
+        //Animating the movement of the card to the discard pile for visual clarity
+        StartCoroutine(AnimateCardDiscard(cardObj));
+        UpdateDeckCountText();
+    }
+
+    public void ReturnCardToHand(GameObject cardObj)
+    {
+        if (cardObj == null) return;
+
+        CardDisplay cardDisplay = cardObj.GetComponent<CardDisplay>();
+        if (cardDisplay == null || cardDisplay.card == null) return;
+
+        if (!playerHand.Contains(cardDisplay.card))
+        {
+            playerHand.Add(cardDisplay.card); // Ensure the card is tracked in the hand list
+        }
+
+        cardObj.transform.SetParent(handArea, false);
+        cardObj.transform.localPosition = Vector3.zero; // Reset position
+        cardObj.transform.rotation = Quaternion.identity; // Reset rotation if needed
+
+        // Ensure the card appears in the right place visually
+        CardHandLayout handLayout = handArea.GetComponent<CardHandLayout>();
+        if (handLayout != null)
+        {
+            handLayout.SetHandUpdating(true); // Ensure layout updates
+        }
     }
 }   

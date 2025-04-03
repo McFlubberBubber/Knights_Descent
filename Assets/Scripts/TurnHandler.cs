@@ -10,7 +10,9 @@ public class TurnHandler : MonoBehaviour
     [SerializeField] private CardManager cardManager;
     [SerializeField] private Image turnProgressFill;
     [SerializeField] private Button endTurnButton;
+    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private List<EnemyController> enemies = new List<EnemyController>(); //In the event that we have multiple enemies
+
 
     [Header("Colors")]
     [SerializeField] private Color readyColor = Color.green;
@@ -111,8 +113,8 @@ public class TurnHandler : MonoBehaviour
         // End the player's turn
         EndPlayerTurn();
 
-        // Wait for 1 second before enemies start their actions
-        yield return new WaitForSeconds(1f);
+        // Wait before enemies start their actions
+        yield return new WaitForSeconds(0.5f);
 
         // Execute each enemy's turn
         foreach (EnemyController enemy in enemies) {
@@ -123,8 +125,8 @@ public class TurnHandler : MonoBehaviour
                 Debug.LogError("Enemy reference is NULL!");
             }
 
-            // Wait for 3 seconds for each enemy's action
-            yield return new WaitForSeconds(3f);
+            // Wait for a few seconds for each enemy's action
+            yield return new WaitForSeconds(2f);
         }
 
         Debug.Log("Enemy Turn Ended, Switching to Player Turn.");
@@ -145,7 +147,9 @@ public class TurnHandler : MonoBehaviour
 
         isPlayerTurn = true;
         UpdateButtonState();
+        cardManager.energyManager.RestoreEnergy(); //Restoring the energy
         cardManager.DrawHand(); // Draw the player's hand
+        playerStats.ResetBlock();
     }
 
     private void EndPlayerTurn() {

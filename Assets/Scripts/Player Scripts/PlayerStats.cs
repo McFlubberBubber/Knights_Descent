@@ -12,6 +12,7 @@ public class PlayerStats : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private Image HPFill;
     [SerializeField] private TMP_Text HPText;
+    [SerializeField] private TMP_Text TopHPText;
 
     [Header("Block Stats")]
     private int blockAmount;
@@ -22,7 +23,7 @@ public class PlayerStats : MonoBehaviour
     void Start(){
         currentHealth = maxHealth;
         Debug.Log($"Player initialized with {currentHealth} HP");
-        // currentHealth = 50; // Set initial health to custom value for testing purposes
+        // currentHealth = 50; //Setting a value for testing purposes
         UpdateHealthUI();
         UpdateBlockUI();
         blockObject.SetActive(false); //Only showing the block value when the player has block value
@@ -81,13 +82,13 @@ public class PlayerStats : MonoBehaviour
 
     //Updating the health UI
     private void UpdateHealthUI() {
-        HPFill.fillAmount = (float)currentHealth / maxHealth; //Updating the health bar fill amount
-        HPText.text = $"{currentHealth}/{maxHealth}"; //Updating the text to show the current health value
+        HPFill.fillAmount = (float)currentHealth / maxHealth; 
+        HPText.text = $"{currentHealth}/{maxHealth}"; 
+        TopHPText.text = $"{currentHealth}/{maxHealth}"; 
     }
 
     //Function that will be called when the player dies  
     private void TriggerGameOver() {
-        // Implement game over logic here, such as showing a game over screen or restarting the level.
         Debug.Log("Game Over!"); // Placeholder for game over logic
     }
 }
