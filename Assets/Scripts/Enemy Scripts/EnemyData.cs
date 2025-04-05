@@ -12,6 +12,7 @@ public class EnemyData : ScriptableObject
     [Header("Prefabs")]
     public GameObject enemyUIPrefab; 
     public GameObject enemyPrefab; // Prefab for the enemy model
+    public GameObject damageTextPrefab; // Add this line to reference the damage text prefab
 
     [Header("Behavior")]
     public List<EnemyAction> actionSequence;  // Fixed order of actions
@@ -37,6 +38,7 @@ public class EnemyData : ScriptableObject
             return newAction;
 
         } else {
+            
             EnemyAction nextAction = actionSequence[currentSequenceIndex];
 
             if(loopSequence) {

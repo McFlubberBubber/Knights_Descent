@@ -27,17 +27,8 @@ public class EnemyAction : ScriptableObject
 
     // Method to calculate total damage with buff applied
     public int GetTotalDamage(){
-        // int adjustedDamagePerHit = damagePerHit + buffAmount; // Apply buff to damage per hit
-        // return isMultiHit ? adjustedDamagePerHit * hits : adjustedDamagePerHit;
-
         return isMultiHit ? (damagePerHit + buffAmount) * hits : damagePerHit + buffAmount;
     }
-        
-    // // Method to apply a buff dynamically
-    // public void ApplyBuff(int buffValue) {
-    //     buffAmount += buffValue; // Directly increase damage per hit
-    //     Debug.Log($"Buff applied. New damage per hit: {damagePerHit}");
-    // }
 }
 
 // Enum to define the type of action

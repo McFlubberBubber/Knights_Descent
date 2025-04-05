@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8ea60d5dd34901345ad0d79601d39f52
+guid: e30cf5a1fb3f5534a9add6b4e53ee765
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - intentIconOverride: {instanceID: 0}
+  - damageNumberPrefab: {fileID: 8113690455058694131, guid: 4f40464f25b43db4db9fc012fff8a3da, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

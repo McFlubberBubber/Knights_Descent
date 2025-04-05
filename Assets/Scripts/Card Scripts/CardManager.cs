@@ -14,10 +14,12 @@ public class CardManager : MonoBehaviour
     [SerializeField] private TMP_Text drawCountText;
     [SerializeField] private TMP_Text discardCountText;
     [SerializeField] private TMP_Text deckCountText;
+    [SerializeField] private TMP_Text gameOverDeckCount;
     [SerializeField] private Button endTurnButton;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] public EnergyManager energyManager; 
     [SerializeField] private EnemyController enemyController; 
+    // [SerializeField] private Transform dragLayer;
 
     [Header("Visual Feedback")]
     [SerializeField] private Transform drawPileVisual;
@@ -33,14 +35,10 @@ public class CardManager : MonoBehaviour
     public List<Card> discardPile = new List<Card>();
 
     private const int STARTING_HAND_SIZE = 5;
-    private const int CARD_COPIES = 6;
+    // private const int STARTER_CARD_COPIES = 6;
     private bool isInitialized = false;
     private CardDisplay selectedCard;
 
-    // void Start(){
-    //     InitializeGame();
-    // }
-    
     public void SetEnemyController(EnemyController controller){
         enemyController = controller;
     }
@@ -54,26 +52,31 @@ public class CardManager : MonoBehaviour
         ShuffleDeck();
         isInitialized = true;
         DrawHand();
+        energyManager.RestoreEnergy(); // Reset energy at the start of the game
     }
     
-
-    void InitializeStarterDeck(){ //Function to add starter cards to the player's deck
+    void InitializeStarterDeck()
+    { 
         playerDeck.Clear();
-        AddCardCopies("Slash");
-        AddCardCopies("Shield");
+        AddCard("Slash", 5);
+        AddCard("Shield", 5);
+        AddCard("Heavy Swing", 1);
+        AddCard("Guard", 1);
         
         drawPile = new List<Card>(playerDeck);
         Debug.Log($"Initialized deck with {playerDeck.Count} cards");
         UpdateDeckCountText();
     }
 
-    void AddCardCopies(string cardName){ //Adding multiple copies of a card to the deck
+    void AddCard(string cardName, int copies)
+    { 
         Card card = cardDatabase.GetCardByName(cardName);
-        if (card == null){
+        if (card == null)
+        {
             Debug.LogError($"{cardName} card not found!");
             return;
         }
-        playerDeck.AddRange(Enumerable.Repeat(card, CARD_COPIES));
+        playerDeck.AddRange(Enumerable.Repeat(card, copies));
     }
 
     void ShuffleDeck(){ //Function to handle shuffling the deck in the draw pile for randomized drawing
@@ -86,6 +89,7 @@ public class CardManager : MonoBehaviour
         Debug.Log("Deck shuffled");
     }
 
+    //OG functions
     public void DrawHand(){ //Drawing the set amount of cards into the player hand (5)
         if (!isInitialized){
             Debug.LogWarning("Game not initialized! Cannot draw hand");
@@ -108,6 +112,7 @@ public class CardManager : MonoBehaviour
         CardHandLayout handLayout = handArea.GetComponent<CardHandLayout>();
         if (handLayout != null){
             handLayout.SetHandUpdating(true); // Set the flag to update the hand layout
+            handLayout.UpdateHand(); // Update the hand layout immediately
         } else {
             Debug.LogError("CardHandLayout component not found on hand area!");
         }
@@ -118,11 +123,13 @@ public class CardManager : MonoBehaviour
         drawPile.RemoveAt(0);
 
         GameObject newCard = Instantiate(cardPrefab, handArea);
-        newCard.SetActive(false);
+        // newCard.SetActive(false);
+        newCard.transform.SetParent(handArea, false); // Set the parent to hand area
 
         CardDisplay display = newCard.GetComponent<CardDisplay>();
         display.card = drawnCard;
         display.UpdateCardDisplay();
+        // display.dragLayer = dragLayer;
         playerHand.Add(drawnCard);
 
         // Debug.Log($"Drawn card: {drawnCard.cardName}");
@@ -180,6 +187,7 @@ public class CardManager : MonoBehaviour
         drawCountText.text = drawPile.Count.ToString();
         discardCountText.text = discardPile.Count.ToString();
         deckCountText.text = $"Deck Size: {playerDeck.Count}";
+        gameOverDeckCount.text = $"- Deck count: {playerDeck.Count}";
     }
 
     //Function that handles the animation of the cards being drawn from the draw pile to the hand
@@ -324,5 +332,22 @@ public class CardManager : MonoBehaviour
         {
             handLayout.SetHandUpdating(true); // Ensure layout updates
         }
+    }
+
+    public void ResetDeck(){
+        //Moving all the cards from the discard pile and hand back to the draw pile
+        drawPile.AddRange(playerHand);
+        drawPile.AddRange(discardPile);
+
+        //Clearing the hand and discard pile
+        playerHand.Clear();
+        discardPile.Clear();
+
+        foreach (Transform child in handArea)
+        {
+            Destroy(child.gameObject); // Destroy the card objects in the hand area
+        }
+        UpdateDeckCountText(); // Update the UI text for the deck counts
+        // ShuffleDeck(); // Shuffle the deck again
     }
 }   

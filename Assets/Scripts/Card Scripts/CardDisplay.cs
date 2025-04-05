@@ -123,30 +123,37 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
         transform.position = eventData.position;
     }
 
-    public void OnEndDrag(PointerEventData eventData) //test function
-    {
-        // Check if we dropped the card on the player
+    public void OnEndDrag(PointerEventData eventData){
         RaycastHit2D hit = Physics2D.Raycast(eventData.position, Vector2.zero);
 
-        if (hit.collider != null && hit.collider.CompareTag("Player")){
-            Debug.Log("Card dropped on player: " + card.cardName);
-            cardLogic.PlayCard(); // Call PlayCard() when card is dropped on the player
-
-        } else if (hit.collider != null && hit.collider.CompareTag("Enemy")) {
-            Debug.Log("Card dropped on enemy: " + card.cardName);
-            cardLogic.PlayCard(); // Call PlayCard() when card is dropped on the enemy
-
-        } else {
-            // Reset position if not dropped on a valid target
-            transform.SetParent(parentBeforeDrag);
-            transform.SetSiblingIndex(originalIndex);
-            transform.localPosition = originalPosition;
-            transform.localRotation = originalRotation;
+        if (hit.collider != null) {
+            if (hit.collider.CompareTag("Player") && card.type == Card.cardType.Skill) {
+                Debug.Log("Skill card dropped on player: " + card.cardName);
+                cardLogic.PlayCard();
+            }
+            else if (hit.collider.CompareTag("Enemy") && card.type == Card.cardType.Attack) {
+                Debug.Log("Attack card dropped on enemy: " + card.cardName);
+                cardLogic.PlayCard();
+            }
+            else {
+                Debug.Log("Card dropped on invalid target or wrong card type.");
+                ReturnCardToOriginalPosition();
+            }
         }
-
+        else {
+            ReturnCardToOriginalPosition();
+        }
         canvasGroup.blocksRaycasts = true;
         handLayout.SetHandUpdating(true);
     }
+
+    private void ReturnCardToOriginalPosition(){
+        transform.SetParent(parentBeforeDrag);
+        transform.SetSiblingIndex(originalIndex);
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
+    }
+
 
     //Function that will move the card to a new position smoothly for visual clarit
     private IEnumerator SmoothMove(Vector3 startPos, Vector3 endPos, float duration)

@@ -36,7 +36,6 @@ public class TurnHandler : MonoBehaviour
         enemies = enemyControllers;
     }   
 
-
     //Function that will handle the button press and release events
     public void OnPointerDown(){
         if (!CanAcceptInput()) return;
@@ -107,44 +106,30 @@ public class TurnHandler : MonoBehaviour
         UpdateButtonState(); // Return to active state
     }
 
-    private IEnumerator EnemyTurnRoutine() {
-        //Debug.Log("Enemy Turn Started");
-
-        // End the player's turn
+    //Function that will handle the enemy turn
+    private IEnumerator EnemyTurnRoutine(){
         EndPlayerTurn();
+        yield return new WaitForSeconds(0.5f); // optional pre-delay
 
-        // Wait before enemies start their actions
-        yield return new WaitForSeconds(0.5f);
-
-        // Execute each enemy's turn
-        foreach (EnemyController enemy in enemies) {
-            if (enemy != null) {
+        foreach (EnemyController enemy in enemies){
+            if (enemy != null){
                 Debug.Log($"Enemy {enemy.enemyData.enemyName} is taking a turn.");
-                enemy.TakeTurn(); // Enemy executes their stored action
-            } else {
-                Debug.LogError("Enemy reference is NULL!");
+                yield return StartCoroutine(enemy.TakeTurn()); // Wait for enemy to finish
+                yield return new WaitForSeconds(0.2f);
             }
-
-            // Wait for a few seconds for each enemy's action
-            yield return new WaitForSeconds(2f);
         }
-
         Debug.Log("Enemy Turn Ended, Switching to Player Turn.");
-
-        // Start the player's turn
         StartPlayerTurn();
     }
 
+    //Function that will start the player turn and show the next intent of the enemies
     private void StartPlayerTurn() {
-        //Debug.Log("Player Turn Started");
-
         foreach (EnemyController enemy in enemies) {
             if (enemy != null) {
                 //enemy.ResetBlock(); // Reset block to 0
                 enemy.ShowNextIntent(); // Show the next intent
             }
         }
-
         isPlayerTurn = true;
         UpdateButtonState();
         cardManager.energyManager.RestoreEnergy(); //Restoring the energy
@@ -152,6 +137,7 @@ public class TurnHandler : MonoBehaviour
         playerStats.ResetBlock();
     }
 
+    //Function that will end the player turn and reset the button state
     private void EndPlayerTurn() {
         Debug.Log("Player Turn Ended");
         isPlayerTurn = false;

@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54787bc654ce4dd4596187e00802a821, type: 3}
-  m_Name: SkeletonMage
+  m_Name: PossessedArmor
   m_EditorClassIdentifier: 
-  enemyName: Skeleton Mage
-  maxHealth: 50
+  enemyName: Possessed Armor
+  maxHealth: 75
   resetHealthOnSpawn: 1
   enemyUIPrefab: {fileID: 5904760455237297746, guid: ceaf94b5b2dc49e4ba1c62ed9645a472, type: 3}
-  enemyPrefab: {fileID: 4780257072666870410, guid: 53672481f8fadc048becd7a93b784c3e, type: 3}
+  enemyPrefab: {fileID: 2229436398662391092, guid: 8cf5ffec8bf372045b64122b43edb391, type: 3}
   damageTextPrefab: {fileID: 8113690455058694131, guid: 4f40464f25b43db4db9fc012fff8a3da, type: 3}
   actionSequence:
-  - {fileID: 11400000, guid: 7cf3f2189f04ac945895b8411b401443, type: 2}
-  - {fileID: 11400000, guid: 73fc657cb6f270f4a82017daeb25b5b9, type: 2}
-  - {fileID: 11400000, guid: 1a79f4a273da3e3419e8f92bc7bf7b98, type: 2}
-  - {fileID: 11400000, guid: 7cf3f2189f04ac945895b8411b401443, type: 2}
-  - {fileID: 11400000, guid: 362cc92e31a511047bbf07f9013ef24a, type: 2}
+  - {fileID: 11400000, guid: 9db0a73bbd21d6a4a8cc847b2ac91373, type: 2}
+  - {fileID: 11400000, guid: 817766a5f3941cd44bd0a98710d24b23, type: 2}
+  - {fileID: 11400000, guid: f07bfdb5ce0570b478fc3c7334d925d0, type: 2}
+  - {fileID: 11400000, guid: 606d6f613c3656949978726b7f931a01, type: 2}
+  - {fileID: 11400000, guid: 3171d6074ac723e408618aec342e1164, type: 2}
   loopSequence: 1
   randomizeSequence: 0
-  currentSequenceIndex: 1
+  currentSequenceIndex: 2
