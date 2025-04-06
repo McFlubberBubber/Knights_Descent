@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private BattleManager battleManager; 
+    [SerializeField] private CardRewardManager cardRewardManager; 
     [SerializeField] private PlayerStats playerStats; 
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private CanvasGroup gameOverPanel;
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
     public void StartCombat(){
         // Condition to ensure the battlemanager is assigned to start the battle
         if (battleManager != null){
-            battleManager.StartBattle();
+            battleManager.StartBattle(true);
         } else {
             Debug.LogError("BattleManager not assigned in GameManager!");
         }
@@ -115,6 +116,7 @@ public class GameManager : MonoBehaviour
     //Calling the end turn function in card manager then fading the in the vistory screen
     public void DisplayVictory(){
         cardManager.EndTurn(); // End the turn to reset the cards
+        cardRewardManager.ResetRewardButtons();
         StartCoroutine(DelayedVictoryFadeIn(0.4f)); // Start the fade-in effect
     }
 
@@ -146,17 +148,18 @@ public class GameManager : MonoBehaviour
         CheckVictoryCondition(enemiesSlain);
     }
 
-    //Functio to load the next battle
+    //Function to load the next battle
     public void LoadNextBattle(){
         // Stop any ongoing fade-in animations
         StopAllCoroutines();
 
         // Call card manager stuff
+        // cardManager.SetDeckResetFlag(false); //Ensuring the deck does not reset itself
         cardManager.ResetDeck(); // Clear the cards from the previous battle
 
-        victoryPanel.alpha = 0; // Reset the victory panel alpha
-        victoryPanel.interactable = false; // Disable interaction 
-        victoryPanel.blocksRaycasts = false; // Disable raycasting
+        victoryPanel.alpha = 0; 
+        victoryPanel.interactable = false;
+        victoryPanel.blocksRaycasts = false; 
 
         battleManager.initNextBattle();
     }

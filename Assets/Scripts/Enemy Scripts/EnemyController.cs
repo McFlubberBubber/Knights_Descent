@@ -45,8 +45,8 @@ public class EnemyController : MonoBehaviour
 
     //Initializes the enemy stats and sets the first action
     private void InitializeEnemy() {
-        // currentHealth = enemyData.maxHealth;
-        currentHealth = 10; // For testing purposes, set a fixed health value
+        currentHealth = enemyData.maxHealth;
+        // currentHealth = 10; // For testing purposes, set a fixed health value
 
         // Reset action sequence index to ensure it starts from the first action
         enemyData.currentSequenceIndex = 0;

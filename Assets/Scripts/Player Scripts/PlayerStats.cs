@@ -46,38 +46,6 @@ public class PlayerStats : MonoBehaviour
     public void SetGameManager(GameManager manager){
         gameManager = manager;
     }
-    
-    // //Function that will handle the damage taken by the player
-    // public void TakeDamage(int damageAmount) {
-    //     Debug.Log($"Player takes {damageAmount} damage. Current HP: {currentHealth}, Current Block: {blockAmount}");
-
-    //     if (blockAmount > 0) {
-    //         // If block exists, reduce it first
-    //         int remainingDamage = damageAmount - blockAmount;
-    //         blockAmount = Mathf.Max(0, blockAmount - damageAmount);
-
-    //         if (remainingDamage > 0) { //Apply remaining damage to health
-    //             currentHealth = Mathf.Max(0, currentHealth - remainingDamage);
-    //             StartCoroutine(ShakeAnimation(0.25f, 7.5f)); // Start the shake animation
-    //             damageDisplay.ShowDamageNumber(remainingDamage); // Show damage number above player
-
-    //         }
-    //     } else { //else just apply damage to health
-    //         currentHealth = Mathf.Max(0, currentHealth - damageAmount);
-    //         StartCoroutine(ShakeAnimation(0.25f, 7.5f)); // Start the shake animation
-    //         damageDisplay.ShowDamageNumber(damageAmount); // Show damage number above player
-
-
-    //     }
-    //     Debug.Log($"After damage: HP = {currentHealth}, Block = {blockAmount}");
-    //     UpdateHealthUI();
-    //     UpdateBlockUI();
-
-    //     if (currentHealth <= 0) {
-    //         Debug.Log("Player HP reached 0! Game Over triggered.");
-    //         TriggerGameOver();
-    //     }
-    // }
 
     public void TakeDamage(int damageAmount) {
         Debug.Log($"Player takes {damageAmount} damage. Current HP: {currentHealth}, Current Block: {blockAmount}");
@@ -125,6 +93,24 @@ public class PlayerStats : MonoBehaviour
     public void ResetBlock() {
         blockAmount = 0;
         UpdateBlockUI();
+    }
+
+    public void Heal(int amount){
+        if (amount <= 0) return;
+
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        Debug.Log($"Player healed for {amount}. Current HP: {currentHealth}");
+        UpdateHealthUI();
+    }
+
+    public void ApplySelfDamage(int selfDmg){
+        Debug.Log($"Player takes {selfDmg} self-damage.");
+
+        currentHealth = Mathf.Max(0, currentHealth - selfDmg);
+        StartCoroutine(ShakeAnimation(0.25f, 7.5f)); // Start the shake animation
+        damageDisplay.ShowDamageNumber(selfDmg, false); 
+
+        UpdateHealthUI();
     }
 
     //Updating the block UI

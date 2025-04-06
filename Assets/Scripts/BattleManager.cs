@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private List<EnemyData> enemyList; // List of enemies
     private int currentEnemyIndex = 0; // Track which enemy is next
 
-    public void StartBattle(){
+    public void StartBattle(bool shouldResetDeck = true){
         if (currentEnemyIndex >= enemyList.Count) 
         {
             Debug.Log("All battles completed!"); 
@@ -26,7 +26,7 @@ public class BattleManager : MonoBehaviour
 
         enemyToSpawn = enemyList[currentEnemyIndex]; // Select the next enemy
         SpawnEnemy();
-        cardManager.InitializeGame();
+        cardManager.InitializeGame(shouldResetDeck);
     }
 
     private void SpawnEnemy()
@@ -37,7 +37,8 @@ public class BattleManager : MonoBehaviour
         // Get the EnemyController component
         EnemyController enemyController = enemyObj.GetComponent<EnemyController>();
         enemyController.enemyData = enemyToSpawn;
-        enemyController.currentHealth = 10; // Set initial health for the enemy
+        // enemyController.currentHealth = 10; // Set initial health for the enemy
+        enemyController.currentHealth = enemyToSpawn.maxHealth; // Set initial health for the enemy
 
         // Setting references
         cardManager.SetEnemyController(enemyController);
@@ -79,7 +80,7 @@ public class BattleManager : MonoBehaviour
     public void initNextBattle()
     {
         currentEnemyIndex++; // Move to the next enemy
-        StartBattle(); // Start the next battle
+        StartBattle(false); // Start the next battle
     }
 
 }

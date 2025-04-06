@@ -23,13 +23,17 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
     //Private variables
     private Vector3 originalPosition;
     private Quaternion originalRotation;
-    private Transform parentBeforeDrag; // Store the original parent before dragging to restore positions later
+    private Transform parentBeforeDrag; 
     private CanvasGroup canvasGroup;
     private int originalIndex;
-    public static CardDisplay selectedCard = null; // Static reference to the currently selected card
+    public static CardDisplay selectedCard = null; 
     private float selectedOffset = -200;
     private CardHandLayout handLayout;
     private CardLogic cardLogic;
+
+    //Variables for reward selection
+    private System.Action<Card> onRewardSelected;
+    private bool isRewardMode = false;
     
     private void Awake()
     {
@@ -51,19 +55,41 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
         costText.text = card.cost.ToString();
         nameText.color = card.type == Card.cardType.Attack ? attackColor : skillColor; //Changing the color of the name text based on the card type
     }
+    public void DisplayCard(Card newCard){
+        card = newCard;
+        UpdateCardDisplay();
+    }
+
+    public void SetRewardSelectionMode(System.Action<Card> callback)
+    {
+        isRewardMode = true;
+        onRewardSelected = callback;
+
+        // Disable dragging logic when in reward mode
+        canvasGroup.blocksRaycasts = true;
+    }
 
     // Function that handles the card selection and deselection
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (selectedCard != null && selectedCard != this){
-            selectedCard.DeselectCard(); // Deselect the previously selected card so there can only be one selected card at a time
+    public void OnPointerClick(PointerEventData eventData){
+        //If the card has been instantiated for a reward selection
+        if (isRewardMode){
+            onRewardSelected?.Invoke(card);
+            Highlight(true);
+            return;
         }
-        if (selectedCard == this){ // If the card is already selected, deselect it
+
+        if (selectedCard != null && selectedCard != this){
+            selectedCard.DeselectCard();
+        }
+
+        if (selectedCard == this){
             DeselectCard();
-        } else {
-            SelectCard(); // Select the clicked card
+        } 
+        else {
+            SelectCard();
         }
     }
+
 
     //Function that handles the selection of a card
     private void SelectCard(){
@@ -98,6 +124,9 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
 
     //Function that handles the start of the drag event
     public void OnBeginDrag(PointerEventData eventData){
+        //if the card has been instantiated for a reward selection
+        if (isRewardMode) return;
+
         if (selectedCard != null) {
             if (selectedCard == this) {
                 selectedCard.DeselectCard(false);
@@ -119,11 +148,15 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
 
     //Making the card follow the mouse/finger while dragging
     public void OnDrag(PointerEventData eventData){
+        if (isRewardMode) return;
+
         if (selectedCard == this) return;
         transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData){
+        if (isRewardMode) return;
+
         RaycastHit2D hit = Physics2D.Raycast(eventData.position, Vector2.zero);
 
         if (hit.collider != null) {
@@ -168,5 +201,14 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
             yield return null;
         }
         transform.localPosition = endPos;
+    }
+
+    public void Highlight(bool isActive){
+        //If the bool value is active, scale the card up to 1.75f, else scale it down to 1.5f
+        if (isActive){
+            transform.localScale = Vector3.one * 1.75f; // Scale up on selection
+        } else if (transform.localScale != Vector3.one){
+            transform.localScale = Vector3.one * 1.5f; // Reset scale on deselection
+        }
     }
 }

@@ -19,4 +19,6 @@ MonoBehaviour:
   block: 2
   heal: 0
   selfDamage: 0
+  isStarterCard: 1
+  cardDraw: 0
   descriptionTemplate: Gain {block} block.

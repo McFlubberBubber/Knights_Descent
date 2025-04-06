@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf0cd667f0dac0a4087a27b1090fc6fc, type: 3}
-  m_Name: Shield
+  m_Name: Blood Draw
   m_EditorClassIdentifier: 
-  cardName: Shield
+  cardName: Blood Draw
   type: 1
-  cost: 1
+  cost: 0
   damage: 0
-  block: 5
+  block: 0
   heal: 0
-  selfDamage: 0
-  isStarterCard: 1
-  cardDraw: 0
-  overcharge: 0
-  descriptionTemplate: Gain {block} block.
+  selfDamage: 5
+  isStarterCard: 0
+  cardDraw: 3
+  descriptionTemplate: Draw {cardDraw} cards. Lose {selfDamage}HP.

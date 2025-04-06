@@ -19,7 +19,6 @@ public class CardManager : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] public EnergyManager energyManager; 
     [SerializeField] private EnemyController enemyController; 
-    // [SerializeField] private Transform dragLayer;
 
     [Header("Visual Feedback")]
     [SerializeField] private Transform drawPileVisual;
@@ -34,8 +33,7 @@ public class CardManager : MonoBehaviour
     public List<Card> playerHand = new List<Card>();
     public List<Card> discardPile = new List<Card>();
 
-    private const int STARTING_HAND_SIZE = 5;
-    // private const int STARTER_CARD_COPIES = 6;
+    private int cardsToDraw = 5;
     private bool isInitialized = false;
     private CardDisplay selectedCard;
 
@@ -43,23 +41,30 @@ public class CardManager : MonoBehaviour
         enemyController = controller;
     }
 
-    public void InitializeGame(){
+    //Initializing the game and checking if the card database is set
+    //If the flag is set to true, it will reset the deck and shuffle it, but in continuation of the game, it will not reset the deck
+    public void InitializeGame(bool shouldResetDeck = true){
         if (cardDatabase == null){
             Debug.LogError("CardDatabase reference not set!");
             return;
         }
-        InitializeStarterDeck();
-        ShuffleDeck();
+
+        if (shouldResetDeck){
+            InitializeStarterDeck();
+            ShuffleDeck();        
+        }
+
         isInitialized = true;
         DrawHand();
         energyManager.RestoreEnergy(); // Reset energy at the start of the game
     }
     
+    //Adding specified amount of cards based on name to the player's deck
     void InitializeStarterDeck()
     { 
         playerDeck.Clear();
-        AddCard("Slash", 5);
-        AddCard("Shield", 5);
+        AddCard("Slash", 3);
+        AddCard("Shield", 3);
         AddCard("Heavy Swing", 1);
         AddCard("Guard", 1);
         
@@ -96,7 +101,7 @@ public class CardManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < STARTING_HAND_SIZE; i++){
+        for (int i = 0; i < cardsToDraw; i++){
             if (drawPile.Count == 0){
                 Debug.Log("Draw pile empty! Reshuffling...");
                 if (discardPile.Count == 0){
@@ -118,7 +123,35 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    void DrawSingleCard(){ //Function that will draw a single card from the top of the draw pile
+    //Using this function for the card draw function within certain cards
+    public void DrawCards(int count){
+        for (int i = 0; i < count; i++){
+            if (drawPile.Count == 0)
+            {
+                Debug.Log("Draw pile empty! Reshuffling...");
+                if (discardPile.Count == 0){
+                    Debug.LogWarning("No cards left to draw!");
+                    return;
+                }
+                ReshufflePiles(); // Pull from discard pile
+            }
+
+            DrawSingleCard();
+            StartCoroutine(AnimateDrawPile()); // Optional per card animation
+        }
+
+        // Update hand layout after drawing cards
+        CardHandLayout handLayout = handArea.GetComponent<CardHandLayout>();
+        if (handLayout != null){
+            handLayout.SetHandUpdating(true);
+            handLayout.UpdateHand();
+        } else{
+            Debug.LogError("CardHandLayout component not found on hand area!");
+        }
+    }
+
+
+    public void DrawSingleCard(){ //Function that will draw a single card from the top of the draw pile
         Card drawnCard = drawPile[0];
         drawPile.RemoveAt(0);
 
@@ -348,6 +381,18 @@ public class CardManager : MonoBehaviour
             Destroy(child.gameObject); // Destroy the card objects in the hand area
         }
         UpdateDeckCountText(); // Update the UI text for the deck counts
-        // ShuffleDeck(); // Shuffle the deck again
+    }
+
+    //Function that will add a card to the player's deck from the rewards, and shuffle it into the draw pile if specified
+    public void AddCardToDeck(Card newCard, bool shuffleIntoDrawPile = true)
+    {
+        playerDeck.Add(newCard);
+
+        if (shuffleIntoDrawPile)
+        {
+            drawPile.Add(newCard);
+            ShuffleDeck();
+        }
+        UpdateDeckCountText();
     }
 }   

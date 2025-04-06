@@ -34,4 +34,9 @@ public class EnergyManager : MonoBehaviour
         currentEnergyText.text = currentEnergy.ToString();
         maxEnergyText.text = maxEnergy.ToString();
     }
+
+    public void GainEnergy(int overchargeAmount){
+        currentEnergy += overchargeAmount;
+        UpdateEnergyUI();
+    }
 }

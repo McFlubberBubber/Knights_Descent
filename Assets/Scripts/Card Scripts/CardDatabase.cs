@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; 
 
 [CreateAssetMenu(fileName = "CardDatabase", menuName = "Scriptable Objects/CardDatabase")]
 public class CardDatabase : ScriptableObject
@@ -20,15 +21,19 @@ public class CardDatabase : ScriptableObject
         }
         return foundCard;
     }
+    public List<Card> GetRandomCards(int count)
+    {
+        List<Card> nonStarterCards = allCards.Where(card => !card.isStarterCard).ToList();
+        List<Card> randomCards = new List<Card>();
 
-    // Optional: Alternative version that creates a new instance
-    public Card GetCardCopyByName(string cardName){
-        Card original = GetCardByName(cardName);
-        if (original == null) return null;
+        for (int i = 0; i < count && nonStarterCards.Count > 0; i++)
+        {
+            int index = Random.Range(0, nonStarterCards.Count);
+            randomCards.Add(nonStarterCards[index]);
+            nonStarterCards.RemoveAt(index);
+        }
 
-        // Create a new instance to avoid modifying the original
-        Card copy = Instantiate(original);
-        copy.name = original.name; // Remove "(Clone)" from name
-        return copy;
+        return randomCards;
     }
+
 }

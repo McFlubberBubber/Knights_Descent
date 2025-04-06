@@ -39,7 +39,6 @@ public class TurnHandler : MonoBehaviour
     //Function that will handle the button press and release events
     public void OnPointerDown(){
         if (!CanAcceptInput()) return;
-        
         isHolding = true;
         holdRoutine = StartCoroutine(HoldRoutine());
     }
@@ -55,10 +54,6 @@ public class TurnHandler : MonoBehaviour
             // Disabled state (gray)
             turnProgressFill.color = disabledColor;
             endTurnButton.interactable = false;
-        } else if (cardManager.playerHand.Count == 0){
-            // Active but empty hand (original color)
-            turnProgressFill.color = originalFillColor;
-            endTurnButton.interactable = false;
         } else {
             // Fully active state
             turnProgressFill.color = originalFillColor;
@@ -68,9 +63,7 @@ public class TurnHandler : MonoBehaviour
 
     //Function that will check if the button can be pressed based on whether its the players turn and if the turn is not being processed
     private bool CanAcceptInput(){
-        return isPlayerTurn && 
-               !isProcessingTurn && 
-               cardManager.playerHand.Count > 0;
+        return isPlayerTurn && !isProcessingTurn;
     }
 
     //Function that will handle the hold routine for the button press

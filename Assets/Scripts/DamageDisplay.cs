@@ -37,8 +37,7 @@ public class DamageDisplay : MonoBehaviour
         StartCoroutine(AnimateDamageText(damageTextObj));
     }
 
-
-    //Overloaded version to handle the "Blocked!" string (no damage value passed)
+    //Version of the function that will only show the "Blocked!" message when there is no damage overflow
     public void ShowDamageNumber(string message){
         // Instantiate the damage text prefab at the spawnTarget's position
         GameObject damageTextObj = Instantiate(damageTextPrefab, spawnTarget.position, Quaternion.identity);
