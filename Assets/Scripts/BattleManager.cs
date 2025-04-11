@@ -77,10 +77,8 @@ public class BattleManager : MonoBehaviour
 
 
     //Function that will load the next battle
-    public void initNextBattle()
-    {
+    public void initNextBattle(){
         currentEnemyIndex++; // Move to the next enemy
         StartBattle(false); // Start the next battle
     }
-
 }

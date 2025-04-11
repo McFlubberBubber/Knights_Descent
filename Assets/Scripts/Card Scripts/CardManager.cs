@@ -19,6 +19,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] public EnergyManager energyManager; 
     [SerializeField] private EnemyController enemyController; 
+    [SerializeField] private Transform selectedLayer; 
 
     [Header("Visual Feedback")]
     [SerializeField] private Transform drawPileVisual;
@@ -160,9 +161,9 @@ public class CardManager : MonoBehaviour
         newCard.transform.SetParent(handArea, false); // Set the parent to hand area
 
         CardDisplay display = newCard.GetComponent<CardDisplay>();
+        display.selectedLayer = selectedLayer;
         display.card = drawnCard;
         display.UpdateCardDisplay();
-        // display.dragLayer = dragLayer;
         playerHand.Add(drawnCard);
 
         // Debug.Log($"Drawn card: {drawnCard.cardName}");

@@ -27,9 +27,10 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
     private CanvasGroup canvasGroup;
     private int originalIndex;
     public static CardDisplay selectedCard = null; 
-    private float selectedOffset = -200;
+    private float selectedOffset = 200;
     private CardHandLayout handLayout;
     private CardLogic cardLogic;
+    public Transform selectedLayer;
 
     //Variables for reward selection
     private System.Action<Card> onRewardSelected;
@@ -97,7 +98,11 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
         originalPosition = transform.localPosition;  
         parentBeforeDrag = transform.parent;        
 
-        transform.SetParent(transform.root);    
+        if (selectedLayer != null) {
+            transform.SetParent(selectedLayer, true);
+        } else {
+            transform.SetParent(transform.root, true);
+        }
 
         Vector3 targetPosition = originalPosition + new Vector3(0, selectedOffset, 0);
         
@@ -109,7 +114,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
 
     //Function that handles the deselection of a card
     public void DeselectCard(bool playAnimation = true){
-        transform.SetParent(parentBeforeDrag);
+        transform.SetParent(parentBeforeDrag, true);
         transform.SetSiblingIndex(originalIndex);
 
         handLayout.SetHandUpdating(false); // Stop hand layout updates
@@ -161,15 +166,15 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler, IBeginDragHandle
 
         if (hit.collider != null) {
             if (hit.collider.CompareTag("Player") && card.type == Card.cardType.Skill) {
-                Debug.Log("Skill card dropped on player: " + card.cardName);
+                // Debug.Log("Skill card dropped on player: " + card.cardName);
                 cardLogic.PlayCard();
             }
             else if (hit.collider.CompareTag("Enemy") && card.type == Card.cardType.Attack) {
-                Debug.Log("Attack card dropped on enemy: " + card.cardName);
+                // Debug.Log("Attack card dropped on enemy: " + card.cardName);
                 cardLogic.PlayCard();
             }
             else {
-                Debug.Log("Card dropped on invalid target or wrong card type.");
+                // Debug.Log("Card dropped on invalid target or wrong card type.");
                 ReturnCardToOriginalPosition();
             }
         }

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf0cd667f0dac0a4087a27b1090fc6fc, type: 3}
-  m_Name: Rejuvenate
+  m_Name: Swing
   m_EditorClassIdentifier: 
-  cardName: Rejuvenate
-  type: 1
-  cost: 3
-  damage: 0
+  cardName: Swing
+  type: 0
+  cost: 0
+  damage: 3
   block: 0
-  heal: 15
+  heal: 0
   selfDamage: 0
   isStarterCard: 0
   cardDraw: 0
-  overcharge: 0
-  descriptionTemplate: Heal {heal}HP.
+  overcharge: 1
+  descriptionTemplate: Deal {damage} damage and gain {overcharge} energy.

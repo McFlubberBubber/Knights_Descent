@@ -12,6 +12,7 @@ public class CardRewardManager : MonoBehaviour
     public Button skipButton;
     public Button rewardButton1;
     public Button rewardButton2;
+    public Button rewardButton3;
 
     [Header("Card Settings")]
     public int numberOfOptions = 3;
@@ -21,6 +22,7 @@ public class CardRewardManager : MonoBehaviour
     [Header("Button Fill Images")]
     public Image rewardButton1Fill; // Reference to the fill image of RewardButton1
     public Image rewardButton2Fill; // Reference to the fill image of RewardButton2
+    public Image rewardButton3Fill; // Reference to the fill image of RewardButton2
 
 
     private Card selectedCard;
@@ -28,6 +30,7 @@ public class CardRewardManager : MonoBehaviour
     [SerializeField] private CardManager cardManager;
     private Color rewardButton1OriginalColor;
     private Color rewardButton2OriginalColor;
+    private Color rewardButton3OriginalColor;
 
     void Start()
     {
@@ -37,6 +40,7 @@ public class CardRewardManager : MonoBehaviour
 
         rewardButton1OriginalColor = rewardButton1Fill.color;
         rewardButton2OriginalColor = rewardButton2Fill.color;
+        rewardButton3OriginalColor = rewardButton3Fill.color;
     }
 
     public void ShowCardRewards()
@@ -124,6 +128,7 @@ public class CardRewardManager : MonoBehaviour
         // Initially disable both buttons and grey them out
         SetButtonDisabled(rewardButton1, rewardButton1Fill);
         SetButtonDisabled(rewardButton2, rewardButton2Fill);
+        SetButtonDisabled(rewardButton3, rewardButton3Fill);
     }
 
     void SetButtonDisabled(Button button, Image buttonFill)
@@ -148,12 +153,17 @@ public class CardRewardManager : MonoBehaviour
         {
             SetButtonDisabled(rewardButton2, rewardButton2Fill);
         }
+        else if (clickedButton == rewardButton3)
+        {
+            SetButtonDisabled(rewardButton3, rewardButton3Fill);
+        }
     }
 
     //Function to reset the reward button states
     public void ResetRewardButtons(){
         ResetRewardButton(rewardButton1);
         ResetRewardButton(rewardButton2);
+        ResetRewardButton(rewardButton3);
     }
     public void ResetRewardButton(Button clickedButton){
         if (clickedButton == rewardButton1)
@@ -168,7 +178,11 @@ public class CardRewardManager : MonoBehaviour
             if (rewardButton2Fill != null)
                 rewardButton2Fill.color = rewardButton2OriginalColor;
         }
+        else if (clickedButton == rewardButton3)
+        {
+            rewardButton3.interactable = true;
+            if (rewardButton3Fill != null)
+                rewardButton3Fill.color = rewardButton3OriginalColor;
+        }
     }
-
-
 }

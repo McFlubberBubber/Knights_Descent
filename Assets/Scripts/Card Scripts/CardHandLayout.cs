@@ -40,8 +40,19 @@ public class CardHandLayout : MonoBehaviour
         if (cardCount == 0) return;
 
         //Calculate the angle step and starting angle based on the number of cards for the fanning effect
-        float angleStep = maxAngle / Mathf.Max(1, cardCount - 1); 
-        float startAngle = -maxAngle / 2f;
+        // float angleStep = maxAngle / Mathf.Max(1, cardCount - 1); 
+        // float startAngle = -maxAngle / 2f;
+
+        //Testing display stuff
+        // Adjust horizontal spread based on number of cards
+        float spreadFactor = Mathf.Clamp01((cardCount - 1) / 4f); // 0 when 1 card, approaches 1 as count -> 5
+        float adjustedHorizontalSpread = Mathf.Lerp(200f, horizontalSpread, spreadFactor); // Tighter at low card count
+
+        // Reduce angle at low counts for tighter clustering
+        float adjustedMaxAngle = Mathf.Lerp(10f, maxAngle, spreadFactor);
+        float angleStep = adjustedMaxAngle / Mathf.Max(1, cardCount - 1);
+        float startAngle = -adjustedMaxAngle / 2f;
+
 
         //For loop to position the cards in a fan layout based on how many cards are in hand
         for (int i = 0; i < cardCount; i++){
