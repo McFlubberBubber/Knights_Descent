@@ -3,18 +3,14 @@ using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public GameObject settingsPanel;
+    public GameObject tutorialPanel;
     public GameObject fadeTransition;
-    // public AudioSource menuAudio;
     private SceneTransition sceneTransition;
 
-    void Start()
-    {
-        settingsPanel.SetActive(false);
+    void Start(){
+        //Setting certain elements to be hidden / seen
+        tutorialPanel.SetActive(false);
         fadeTransition.SetActive(true);
-
-        // volumeSlider.value = menuAudio.volume;
-        // volumeSlider.onValueChanged.AddListener(SetVolume);
 
         sceneTransition = fadeTransition.GetComponent<SceneTransition>();
         Image fadeImage = fadeTransition.GetComponent<Image>();
@@ -27,26 +23,22 @@ public class MainMenuManager : MonoBehaviour
         StartCoroutine(sceneTransition.FadeOutAndHide(fadeImage, 1.0f)); // Fade out the transition image
     }
 
-    public void StartGame()
-    {
+    //Function that will handle the scene transition from the main menu to the battle scene
+    public void StartGame(){
         fadeTransition.SetActive(true);
         sceneTransition.beginFadeTransition("BattleScreen");
         Debug.Log("Button presed cuh");
     }
 
-    public void DisplaySettings(){
-        settingsPanel.SetActive(true);
+    public void DisplayTutorial(){ //Function to display the tutorial
+        tutorialPanel.SetActive(true);
     } 
 
-    public void CloseSettings(){
-         settingsPanel.SetActive(false);
+    public void CloseTutorial(){ //Function to close/hide the tutorial panel
+         tutorialPanel.SetActive(false);
     }
 
-    // public void SetVolume(float volume){
-    //     menuAudio.volume = volume;
-    // }
-
-    public void QuitApplication(){
+    public void QuitApplication(){ //Function that will close the application when the button is pressed
         Application.Quit();
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
