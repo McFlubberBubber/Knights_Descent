@@ -154,7 +154,6 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
 
         // Call card manager stuff
-        // cardManager.SetDeckResetFlag(false); //Ensuring the deck does not reset itself
         cardManager.ResetDeck(); // Clear the cards from the previous battle
 
         victoryPanel.alpha = 0; 
