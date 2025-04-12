@@ -8,7 +8,7 @@ public class PlayerStats : MonoBehaviour
 {
     [Header("Health Stats")]
     public int maxHealth = 75;
-    private int currentHealth;
+    public int currentHealth;
 
     [Header("UI Elements")]
     [SerializeField] private Image HPFill;
@@ -33,7 +33,7 @@ public class PlayerStats : MonoBehaviour
     void Start(){
         currentHealth = maxHealth;
         Debug.Log($"Player initialized with {currentHealth} HP");
-        // currentHealth = 50; //Setting a value for testing purposes
+        // currentHealth = 5; //Setting a value for testing purposes
         UpdateHealthUI();
         UpdateBlockUI();
         blockObject.SetActive(false); //Only showing the block value when the player has block value

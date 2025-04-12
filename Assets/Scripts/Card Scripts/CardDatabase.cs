@@ -21,19 +21,19 @@ public class CardDatabase : ScriptableObject
         }
         return foundCard;
     }
+
+    //Function utilised by the card reward manager to get a random list of cards based on the parameter ' int count'
     public List<Card> GetRandomCards(int count)
     {
-        List<Card> nonStarterCards = allCards.Where(card => !card.isStarterCard).ToList();
+        List<Card> nonStarterCards = allCards.Where(card => !card.isStarterCard).ToList(); //Finding out which cards don't have the starter flag
         List<Card> randomCards = new List<Card>();
 
-        for (int i = 0; i < count && nonStarterCards.Count > 0; i++)
-        {
-            int index = Random.Range(0, nonStarterCards.Count);
-            randomCards.Add(nonStarterCards[index]);
-            nonStarterCards.RemoveAt(index);
+        //For looping based on the parameter and until there are no starter cards left
+        for (int i = 0; i < count && nonStarterCards.Count > 0; i++){
+            int index = Random.Range(0, nonStarterCards.Count); //Getting a random integer from 0 to the number of cards in the nonStarterCards list
+            randomCards.Add(nonStarterCards[index]); //Adding a random card using the index
+            nonStarterCards.RemoveAt(index); //Removing the card from the list 
         }
-
         return randomCards;
     }
-
 }

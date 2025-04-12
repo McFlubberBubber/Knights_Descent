@@ -81,6 +81,12 @@ public class EnemyController : MonoBehaviour
                 // Execute multiple hits if it's a multi-hit action
                 for (int i = 0; i < action.hits; i++)
                 {
+                    if (playerStats.currentHealth <= 0)  // Check if the player's health is 0 or less
+                    {
+                        Debug.Log("Player has died. Ending attack sequence.");
+                        break;  // Stop the attack sequence
+                    }
+
                     // Wait for the full animation before continuing to the next hit
                     yield return StartCoroutine(LungeForwardAnimation(100f, 0.5f, () => {
                         playerStats.TakeDamage(damagePerHit);

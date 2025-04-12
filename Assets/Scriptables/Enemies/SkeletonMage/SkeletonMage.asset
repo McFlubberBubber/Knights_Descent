@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SkeletonMage
   m_EditorClassIdentifier: 
   enemyName: Skeleton Mage
-  maxHealth: 50
+  maxHealth: 40
   resetHealthOnSpawn: 1
   enemyUIPrefab: {fileID: 5904760455237297746, guid: ceaf94b5b2dc49e4ba1c62ed9645a472, type: 3}
   enemyPrefab: {fileID: 4780257072666870410, guid: 53672481f8fadc048becd7a93b784c3e, type: 3}
@@ -26,4 +26,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 362cc92e31a511047bbf07f9013ef24a, type: 2}
   loopSequence: 1
   randomizeSequence: 0
-  currentSequenceIndex: 1
+  currentSequenceIndex: 2

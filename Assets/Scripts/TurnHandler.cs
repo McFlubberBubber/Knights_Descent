@@ -19,7 +19,7 @@ public class TurnHandler : MonoBehaviour
     [SerializeField] private Color disabledColor = new Color(0.6f, 0.6f, 0.6f); // Gray
 
     [Header("Settings")]
-    [SerializeField] private float holdDuration = 1f;
+    [SerializeField] private float holdDuration = .5f;
 
     private Color originalFillColor;
     private bool isPlayerTurn = true;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Burning Spirit
   m_EditorClassIdentifier: 
   enemyName: Burning Spirit
-  maxHealth: 100
+  maxHealth: 80
   resetHealthOnSpawn: 1
   enemyUIPrefab: {fileID: 5904760455237297746, guid: ceaf94b5b2dc49e4ba1c62ed9645a472, type: 3}
   enemyPrefab: {fileID: 3764683895585938067, guid: 43b9088daf4d1604e94d203baa6440cb, type: 3}
